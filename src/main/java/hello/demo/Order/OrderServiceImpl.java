@@ -1,15 +1,19 @@
 package hello.demo.Order;
 
 import hello.demo.discount.DiscountPolicy;
-import hello.demo.discount.FixDiscountPolicy;
 import hello.demo.member.Member;
 import hello.demo.member.MemberRepository;
-import hello.demo.member.MemoryMemberRepository;
 
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService{ //클라이언트
 
-    private final MemberRepository memberRepository = new MemoryMemberRepository();
-    private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
+    private final MemberRepository memberRepository; // DIP를 지키고있음(인터페이스에만 의존중)
+    private final DiscountPolicy discountPolicy;
+
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
         Member member = memberRepository.findById(memberId); //멤버 찾기
